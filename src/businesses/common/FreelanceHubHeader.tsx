@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import {
   ShoppingBag,
-  Store,
-  LayoutDashboard,
-  MessageCircle,
-  Instagram,
-  MapPin,
   Sun,
   Moon,
   Menu,
   X,
+  MapPin,
   Phone,
+  MessageCircle,
+  Instagram,
 } from 'lucide-react';
 import { GK_STORE_INFO, UI_TRANSLATIONS } from '../../data/casualAlgeriaData';
 import { LanguageCode } from '../types';
@@ -24,6 +22,7 @@ interface FreelanceHubHeaderProps {
   onSelectLang: (lang: LanguageCode) => void;
   themeMode: 'light' | 'dark';
   onToggleTheme: () => void;
+  onQuickSelectCategory?: (category: string) => void;
 }
 
 export const FreelanceHubHeader: React.FC<FreelanceHubHeaderProps> = ({
@@ -35,228 +34,191 @@ export const FreelanceHubHeader: React.FC<FreelanceHubHeaderProps> = ({
   onSelectLang,
   themeMode,
   onToggleTheme,
+  onQuickSelectCategory,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = UI_TRANSLATIONS[lang];
   const isDark = themeMode === 'dark';
 
+  const handleNavCategory = (cat: string) => {
+    setViewMode('storefront');
+    if (onQuickSelectCategory) {
+      onQuickSelectCategory(cat);
+    }
+    setIsMobileMenuOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById('collection-catalog');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+  };
+
   return (
     <header
-      className={`sticky top-0 z-40 backdrop-blur-xl border-b text-xs transition-colors duration-200 shadow-sm w-full max-w-full overflow-hidden ${
+      className={`sticky top-0 z-40 border-b backdrop-blur-xl transition-colors duration-200 w-full max-w-full ${
         isDark
-          ? 'bg-[#0a0b0e]/95 border-zinc-800 text-zinc-200'
-          : 'bg-white/95 border-zinc-200 text-zinc-800'
+          ? 'bg-[#0B0C0E]/92 border-[#22252D] text-[#F4F1EA]'
+          : 'bg-[#FAF8F5]/92 border-[#E6E1D6] text-[#141413]'
       }`}
     >
-      {/* Top Algerian Delivery Announcement Strip */}
+      {/* Slim Top Atelier Strip (32px, desktop/tablet) */}
       <div
-        className={`border-b px-2 sm:px-6 py-1.5 flex items-center justify-between text-[11px] transition-colors duration-200 w-full overflow-hidden ${
+        className={`hidden sm:flex items-center justify-between max-w-7xl mx-auto px-6 lg:px-8 h-8 border-b text-[11px] tracking-wide transition-colors ${
           isDark
-            ? 'bg-gradient-to-r from-amber-600/20 via-zinc-900 to-amber-600/20 border-amber-500/20 text-zinc-300'
-            : 'bg-gradient-to-r from-amber-100 via-amber-50 to-amber-100 border-amber-200/80 text-zinc-800'
+            ? 'border-[#1C1F26] text-stone-400'
+            : 'border-[#EDE8DE] text-stone-600'
         }`}
       >
-        <div className="flex items-center gap-1.5 mx-auto sm:mx-0 overflow-hidden text-ellipsis whitespace-nowrap max-w-full px-1">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
-          <span className={`font-medium truncate ${isDark ? 'text-amber-200' : 'text-amber-900 font-semibold'}`}>
-            {t.deliveryBanner}
-          </span>
-        </div>
+        <span className="truncate">{t.deliveryBanner}</span>
 
-        <div className="hidden sm:flex items-center gap-3 text-[11px] shrink-0">
+        <div className="flex items-center gap-4 shrink-0">
           <a
             href={GK_STORE_INFO.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex items-center gap-1 transition-colors ${
-              isDark ? 'text-zinc-400 hover:text-amber-400' : 'text-zinc-600 hover:text-amber-700'
-            }`}
+            className="flex items-center gap-1.5 hover:text-[#B48327] dark:hover:text-[#D4AF37] transition-colors whitespace-nowrap shrink-0"
           >
-            <MapPin className="w-3.5 h-3.5 text-amber-500" />
+            <MapPin className="w-3 h-3 text-[#B48327] dark:text-[#D4AF37]" />
             <span>{t.mascaraLocation}</span>
           </a>
-          <span className={isDark ? 'text-zinc-600' : 'text-zinc-300'}>•</span>
+          <span aria-hidden="true" className="opacity-30">|</span>
           <a
             href={GK_STORE_INFO.whatsappDirect}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 hover:underline text-emerald-600 font-semibold"
+            className="flex items-center gap-1.5 font-mono tabular-nums hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors whitespace-nowrap shrink-0"
           >
-            <Phone className="w-3 h-3 text-emerald-500" />
+            <Phone className="w-3 h-3" />
             <span>{GK_STORE_INFO.phoneFormatted}</span>
           </a>
         </div>
       </div>
 
-      {/* Main Navigation Bar - Guaranteed 0-overflow on all phone widths */}
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-4 w-full min-w-0">
-        {/* Brand & Boutique Identity */}
-        <div className="flex items-center gap-2 min-w-0 shrink">
-          <div
-            onClick={() => setViewMode('storefront')}
-            className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer group min-w-0"
-          >
-            {/* ALLURE HOMME Official Badge */}
-            <div
-              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full border flex flex-col items-center justify-center shrink-0 shadow-sm transition-all ${
-                isDark
-                  ? 'bg-gradient-to-br from-zinc-800 to-zinc-950 border-amber-400/50 group-hover:border-amber-400'
-                  : 'bg-gradient-to-br from-zinc-900 to-black border-amber-500/60 shadow-md'
-              }`}
-            >
-              <span className="text-[10px] sm:text-xs font-serif font-black tracking-tighter text-amber-300 leading-none">AH</span>
-              <span className="text-[5px] sm:text-[6px] font-sans font-bold tracking-widest text-zinc-300 uppercase leading-none">HOMME</span>
-            </div>
+      {/* Main 3-Zone Top Bar */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4 lg:gap-8 w-full">
+        {/* Zone 1: Single-line Brand Wordmark */}
+        <button
+          onClick={() => {
+            setViewMode('storefront');
+            if (onQuickSelectCategory) onQuickSelectCategory('All');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="font-serif-luxury text-lg sm:text-xl font-semibold tracking-[0.14em] uppercase whitespace-nowrap shrink-0 cursor-pointer hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B48327]"
+        >
+          {GK_STORE_INFO.name}
+        </button>
 
-            <div className="min-w-0 max-w-[130px] sm:max-w-none">
-              <div className="flex items-center gap-1 sm:gap-1.5">
-                <span className={`text-xs sm:text-base font-bold tracking-tight font-display truncate ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-                  {GK_STORE_INFO.name}
-                </span>
-                <span className={`px-1 py-0.2 rounded text-[8px] sm:text-[10px] font-mono font-bold shrink-0 ${
-                  isDark ? 'bg-zinc-800 text-amber-300 border border-amber-400/20' : 'bg-amber-100 text-amber-800 border border-amber-300'
-                }`}>
-                  22 SBA
-                </span>
-              </div>
-              <p className={`text-[10px] hidden sm:block italic truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                "{GK_STORE_INFO.tagline}"
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Center: Switcher Mode (Boutique Client vs Gestion de Stock - desktop only) */}
-        <div className={`hidden md:flex items-center p-1 rounded-2xl border transition-colors shrink-0 ${
-          isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-100 border-zinc-200'
-        }`}>
+        {/* Zone 2: Clean Single-Line Typography Navigation Links */}
+        <nav className="hidden md:flex items-center gap-7 text-[13px] font-medium">
           <button
-            onClick={() => setViewMode('storefront')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl font-medium transition-all text-xs cursor-pointer ${
+            onClick={() => handleNavCategory('All')}
+            className={`relative py-1 whitespace-nowrap shrink-0 cursor-pointer transition-colors hover:text-[#B48327] dark:hover:text-[#D4AF37] ${
               viewMode === 'storefront'
-                ? isDark
-                  ? 'bg-amber-400 text-black font-bold shadow-md'
-                  : 'bg-white text-zinc-900 font-bold shadow-sm border border-zinc-200'
-                : isDark
-                ? 'text-zinc-400 hover:text-white'
-                : 'text-zinc-600 hover:text-black'
+                ? 'text-[#141413] dark:text-[#F4F1EA] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-[#B48327] dark:after:bg-[#D4AF37]'
+                : 'text-stone-500 dark:text-stone-400'
             }`}
           >
-            <Store className="w-3.5 h-3.5" />
-            <span>{t.navStore}</span>
+            {lang === 'ar' ? 'التشكيلة' : lang === 'en' ? 'Collection' : 'Collection'}
+          </button>
+
+          <button
+            onClick={() => handleNavCategory(lang === 'ar' ? 'بذلات وسترات رسمية' : 'Costumes & Blazers')}
+            className="py-1 whitespace-nowrap shrink-0 cursor-pointer text-stone-600 dark:text-stone-400 hover:text-[#141413] dark:hover:text-[#F4F1EA] transition-colors"
+          >
+            {lang === 'ar' ? 'بذلات وبليزر' : lang === 'en' ? 'Tailoring' : 'Blazers'}
+          </button>
+
+          <button
+            onClick={() => handleNavCategory(lang === 'ar' ? 'بولو وقمصان كلاسيك' : 'Polos & Chemises')}
+            className="py-1 whitespace-nowrap shrink-0 cursor-pointer text-stone-600 dark:text-stone-400 hover:text-[#141413] dark:hover:text-[#F4F1EA] transition-colors"
+          >
+            {lang === 'ar' ? 'بولو وقمصان' : lang === 'en' ? 'Knitwear' : 'Polos & Lin'}
           </button>
 
           <button
             onClick={() => setViewMode('desktop_app')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl font-medium transition-all text-xs cursor-pointer ${
+            className={`relative py-1 whitespace-nowrap shrink-0 cursor-pointer transition-colors hover:text-[#B48327] dark:hover:text-[#D4AF37] ${
               viewMode === 'desktop_app'
-                ? isDark
-                  ? 'bg-zinc-800 text-amber-300 font-bold border border-amber-400/30 shadow-md'
-                  : 'bg-amber-500 text-black font-bold shadow-sm'
-                : isDark
-                ? 'text-zinc-400 hover:text-white'
-                : 'text-zinc-600 hover:text-black'
+                ? 'text-[#141413] dark:text-[#F4F1EA] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-[#B48327] dark:after:bg-[#D4AF37]'
+                : 'text-stone-600 dark:text-stone-400'
             }`}
           >
-            <LayoutDashboard className="w-3.5 h-3.5" />
-            <span>{t.navDashboard}</span>
+            {t.navDashboard}
           </button>
-        </div>
+        </nav>
 
-        {/* Right Tools: Theme Toggle, Language Switcher, Cart, Menu - Carefully sized for mobile viewports */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-          {/* Light / Dark Mode Toggle Button */}
+        {/* Zone 3: Utilities + Primary Bag CTA */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Language Switcher */}
+          <div
+            className={`hidden sm:flex items-center border rounded-lg p-0.5 text-[11px] font-medium ${
+              isDark ? 'border-[#252932] bg-[#13151A]' : 'border-[#E6E1D6] bg-white'
+            }`}
+            role="group"
+            aria-label="Language"
+          >
+            {(['fr', 'ar', 'en'] as LanguageCode[]).map((code) => (
+              <button
+                key={code}
+                onClick={() => onSelectLang(code)}
+                className={`px-2 py-1 rounded-md transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                  code === 'ar' ? 'font-arabic' : ''
+                } ${
+                  lang === code
+                    ? isDark
+                      ? 'bg-[#F4F1EA] text-[#141413] font-semibold'
+                      : 'bg-[#141413] text-[#FAF8F5] font-semibold'
+                    : 'text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100'
+                }`}
+              >
+                {code === 'ar' ? 'عربي' : code.toUpperCase()}
+              </button>
+            ))}
+          </div>
+
+          {/* Theme Toggle */}
           <button
             onClick={onToggleTheme}
-            className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer ${
+            className={`p-2 rounded-lg border transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center ${
               isDark
-                ? 'bg-zinc-900 text-amber-400 border-zinc-800 hover:bg-zinc-800'
-                : 'bg-zinc-100 text-amber-600 border-zinc-200 hover:bg-zinc-200'
+                ? 'border-[#252932] bg-[#13151A] text-[#D4AF37] hover:bg-[#1B1E25]'
+                : 'border-[#E6E1D6] bg-white text-[#9A6E1C] hover:bg-[#F2EFE9]'
             }`}
             title={isDark ? t.themeLight : t.themeDark}
             aria-label="Toggle theme"
           >
-            {isDark ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
-          {/* Language Switcher (FR / AR / EN) */}
-          <div className={`flex items-center p-0.5 rounded-xl border text-[9px] sm:text-[11px] ${
-            isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-200'
-          }`}>
-            <button
-              onClick={() => onSelectLang('fr')}
-              className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg font-bold transition-colors cursor-pointer ${
-                lang === 'fr'
-                  ? 'bg-amber-400 text-black'
-                  : isDark
-                  ? 'text-zinc-400 hover:text-white'
-                  : 'text-zinc-600 hover:text-black'
-              }`}
-            >
-              FR
-            </button>
-            <button
-              onClick={() => onSelectLang('ar')}
-              className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg font-bold transition-colors cursor-pointer font-arabic ${
-                lang === 'ar'
-                  ? 'bg-amber-400 text-black'
-                  : isDark
-                  ? 'text-zinc-400 hover:text-white'
-                  : 'text-zinc-600 hover:text-black'
-              }`}
-            >
-              عربي
-            </button>
-            <button
-              onClick={() => onSelectLang('en')}
-              className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg font-bold transition-colors cursor-pointer ${
-                lang === 'en'
-                  ? 'bg-amber-400 text-black'
-                  : isDark
-                  ? 'text-zinc-400 hover:text-white'
-                  : 'text-zinc-600 hover:text-black'
-              }`}
-            >
-              EN
-            </button>
-          </div>
-
-          {/* Direct WhatsApp Contact Button - Desktop */}
-          <a
-            href={GK_STORE_INFO.whatsappDirect}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
-              isDark
-                ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600/30'
-                : 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100'
-            }`}
-            title="Contacter ALLURE HOMME sur WhatsApp"
-          >
-            <MessageCircle className="w-3.5 h-3.5 text-emerald-500" />
-            <span>WhatsApp</span>
-          </a>
-
-          {/* Shopping Bag Button with Counter */}
+          {/* Primary Action: Shopping Bag */}
           <button
             onClick={onOpenCart}
-            className="relative flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold text-xs shadow-sm hover:from-amber-300 hover:to-amber-400 transition-all cursor-pointer shrink-0"
+            className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap shrink-0 min-h-[38px] ${
+              isDark
+                ? 'bg-[#F4F1EA] text-[#141413] hover:bg-white'
+                : 'bg-[#141413] text-[#FAF8F5] hover:bg-[#292826]'
+            }`}
             aria-label="Ouvrir le panier"
           >
-            <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline text-xs">Panier</span>
-            {cartCount > 0 && (
-              <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-black text-amber-300 text-[8px] sm:text-[10px] font-bold flex items-center justify-center shadow-inner">
-                {cartCount}
-              </span>
-            )}
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">{lang === 'ar' ? 'السلة' : lang === 'en' ? 'Bag' : 'Panier'}</span>
+            <span className={`font-mono tabular-nums text-[11px] px-1.5 py-0.2 rounded ${
+              cartCount > 0
+                ? 'bg-[#B48327] text-white'
+                : isDark
+                ? 'bg-stone-300 text-stone-800'
+                : 'bg-stone-700 text-stone-200'
+            }`}>
+              {cartCount}
+            </span>
           </button>
 
-          {/* Mobile Menu Hamburger */}
+          {/* Mobile Menu Trigger */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-1.5 rounded-xl transition-colors ${
-              isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
+            className={`md:hidden p-2 rounded-lg border transition-colors cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center ${
+              isDark
+                ? 'border-[#252932] text-stone-300 hover:bg-[#13151A]'
+                : 'border-[#E6E1D6] text-stone-700 hover:bg-[#F2EFE9]'
             }`}
             aria-label="Menu"
           >
@@ -265,77 +227,96 @@ export const FreelanceHubHeader: React.FC<FreelanceHubHeaderProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Slide-down Menu */}
       {isMobileMenuOpen && (
-        <div className={`md:hidden border-t p-3 space-y-3 animate-fadeIn w-full overflow-hidden ${
-          isDark ? 'border-zinc-800 bg-[#0d0e12]' : 'border-zinc-200 bg-white shadow-xl'
-        }`}>
+        <div
+          className={`md:hidden border-t px-4 py-4 space-y-4 ${
+            isDark ? 'border-[#22252D] bg-[#0E1014]' : 'border-[#E6E1D6] bg-white'
+          }`}
+        >
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => {
                 setViewMode('storefront');
                 setIsMobileMenuOpen(false);
               }}
-              className={`flex items-center justify-center gap-2 p-2 rounded-xl text-xs font-bold transition-all ${
+              className={`py-2.5 px-3 rounded-lg text-xs font-semibold border transition-colors ${
                 viewMode === 'storefront'
-                  ? 'bg-amber-400 text-black shadow-sm'
+                  ? isDark
+                    ? 'bg-[#F4F1EA] text-[#141413] border-[#F4F1EA]'
+                    : 'bg-[#141413] text-[#FAF8F5] border-[#141413]'
                   : isDark
-                  ? 'bg-zinc-900 text-zinc-300 border border-zinc-800'
-                  : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
+                  ? 'border-[#252932] text-stone-300'
+                  : 'border-[#E6E1D6] text-stone-700'
               }`}
             >
-              <Store className="w-4 h-4" />
-              <span>{t.navStore}</span>
+              {t.navStore}
             </button>
-
             <button
               onClick={() => {
                 setViewMode('desktop_app');
                 setIsMobileMenuOpen(false);
               }}
-              className={`flex items-center justify-center gap-2 p-2 rounded-xl text-xs font-bold transition-all ${
+              className={`py-2.5 px-3 rounded-lg text-xs font-semibold border transition-colors ${
                 viewMode === 'desktop_app'
                   ? isDark
-                    ? 'bg-zinc-800 text-amber-300 border border-amber-400/40'
-                    : 'bg-amber-500 text-black shadow-sm'
+                    ? 'bg-[#F4F1EA] text-[#141413] border-[#F4F1EA]'
+                    : 'bg-[#141413] text-[#FAF8F5] border-[#141413]'
                   : isDark
-                  ? 'bg-zinc-900 text-zinc-300 border border-zinc-800'
-                  : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
+                  ? 'border-[#252932] text-stone-300'
+                  : 'border-[#E6E1D6] text-stone-700'
               }`}
             >
-              <LayoutDashboard className="w-4 h-4" />
-              <span>{t.navDashboard}</span>
+              {t.navDashboard}
             </button>
           </div>
 
-          <div className={`pt-2 border-t flex items-center justify-around text-xs ${
-            isDark ? 'border-zinc-800' : 'border-zinc-200'
-          }`}>
+          {/* Mobile Language Selector */}
+          <div className="flex items-center justify-between pt-2 border-t border-stone-200 dark:border-stone-800">
+            <span className="text-xs text-stone-500">Langue</span>
+            <div className="flex items-center gap-1">
+              {(['fr', 'ar', 'en'] as LanguageCode[]).map((code) => (
+                <button
+                  key={code}
+                  onClick={() => onSelectLang(code)}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold ${
+                    code === 'ar' ? 'font-arabic' : ''
+                  } ${
+                    lang === code
+                      ? 'bg-[#B48327] text-white'
+                      : 'text-stone-500 dark:text-stone-400'
+                  }`}
+                >
+                  {code === 'ar' ? 'عربي' : code.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-around pt-2 border-t border-stone-200 dark:border-stone-800 text-xs">
             <a
               href={GK_STORE_INFO.whatsappDirect}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-emerald-600 font-semibold"
+              className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium"
             >
               <MessageCircle className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
             </a>
-
             <a
               href={GK_STORE_INFO.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-pink-600 font-semibold"
+              className="flex items-center gap-1.5 text-stone-600 dark:text-stone-300 font-medium"
             >
               <Instagram className="w-3.5 h-3.5" />
               <span>@{GK_STORE_INFO.instagramHandle}</span>
             </a>
-
             <a
               href={GK_STORE_INFO.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-amber-600 font-semibold"
+              className="flex items-center gap-1.5 text-[#B48327] dark:text-[#D4AF37] font-medium"
             >
               <MapPin className="w-3.5 h-3.5" />
               <span>Sidi Bel Abbès</span>

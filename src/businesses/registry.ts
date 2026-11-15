@@ -14,15 +14,23 @@ class BusinessStorageManager {
 
   // Get products with local storage persistence
   getProducts(businessId: BusinessIndustryId = 'casual_men'): BusinessProduct[] {
+    const initial = ALL_BUSINESSES[businessId]?.sampleProducts || CASUAL_BUSINESS_CONFIG.sampleProducts;
     try {
       const stored = localStorage.getItem(this.getStorageKey(businessId, 'products'));
       if (stored) {
-        return JSON.parse(stored);
+        const parsed: BusinessProduct[] = JSON.parse(stored);
+        const migrated = parsed.map((item) => {
+          const hasLegacyExternal = item.images?.some((img) => img.includes('unsplash.com'));
+          if (!hasLegacyExternal) return item;
+          const fresh = initial.find((p) => p.id === item.id);
+          return fresh ? { ...item, images: fresh.images } : item;
+        });
+        this.saveProducts(businessId, migrated);
+        return migrated;
       }
     } catch (e) {
       console.error('Error reading business products', e);
     }
-    const initial = ALL_BUSINESSES[businessId]?.sampleProducts || CASUAL_BUSINESS_CONFIG.sampleProducts;
     this.saveProducts(businessId, initial);
     return initial;
   }

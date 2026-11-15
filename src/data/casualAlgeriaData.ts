@@ -23,6 +23,17 @@ export const ALLURE_STORE_INFO = {
 export const GK_STORE_INFO = ALLURE_STORE_INFO;
 export const CASUAL_STORE_INFO = ALLURE_STORE_INFO;
 
+export const HERO_ATELIER_IMAGE = '/src/assets/images/hero_sartorial_atelier_1794759389345.jpg';
+
+export const STUDIO_IMAGE_PRESETS: { label: string; url: string }[] = [
+  { label: 'Blazer Marine', url: '/src/assets/images/prod_navy_blazer_1794759389219.jpg' },
+  { label: 'Polo Tricot', url: '/src/assets/images/prod_knit_polo_1794759390482.jpg' },
+  { label: 'Pantalon Anthracite', url: '/src/assets/images/prod_pleated_trousers_1794759391420.jpg' },
+  { label: 'Mocassins Noir', url: '/src/assets/images/prod_leather_loafers_1794759390824.jpg' },
+  { label: 'Chemise Blanche', url: '/src/assets/images/prod_white_shirt_1794759411548.jpg' },
+  { label: 'Surchemise Camel', url: '/src/assets/images/prod_suede_overshirt_1794759393049.jpg' },
+];
+
 // 58 Wilayas of Algeria with standard delivery rates (DZD) - Sidi Bel Abbès (22) is the boutique home wilaya
 export const ALGERIAN_WILAYAS: AlgerianWilaya[] = [
   { code: '01', name: '01 - Adrar', nameAr: '01 - أدرار', deliveryHomeDZD: 950, deliveryStopDeskDZD: 700, zone: 'sud' },
@@ -123,8 +134,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 12,
     sizes: ['48', '50', '52', '54', '56'],
     images: [
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_navy_blazer_1794759389219.jpg',
+      '/src/assets/images/hero_sartorial_atelier_1794759389345.jpg',
     ],
     description: 'Veste blazer structurée taillée dans un drap de laine peignée bleu marine profond. Doublure satinée bordeaux avec poches passepoilées intérieures, fente d\'aisance dorsale et boutons dorés mats brossés. La pièce maîtresse pour un style habillé ou casual chic à Sidi Bel Abbès.',
     descriptionAr: 'بليزر سارتوريال رسمي كحلي ملكي بلمسة عصرية. قماش صوف ناعم عالي الكثافة، بطانة ساتان فاخرة، وتفاصيل أزرار ذهبية غير لامعة تعكس فخامة إطلالة الرجل في المناسبات.',
@@ -161,8 +172,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 18,
     sizes: ['M', 'L', 'XL', 'XXL'],
     images: [
-      'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_knit_polo_1794759390482.jpg',
+      '/src/assets/images/prod_cream_cardigan_1794759414540.jpg',
     ],
     description: 'Polo en maille de coton torsadée respirante avec col italien ouvert bicolore contrasté. Tissu doux et léger, ne froisse pas, parfait pour les sorties quotidiennes et les journées printanières et estivales.',
     descriptionAr: 'قميص بولو تريكو محبوك فائق النعومة، ياقة إيطالية مفتوحة بتباين أنيق بين الأبيض العاجي والأزرق الكحلي لمظهر مريح وجذاب.',
@@ -194,8 +205,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 15,
     sizes: ['38', '40', '42', '44', '46', '48'],
     images: [
-      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_pleated_trousers_1794759391420.jpg',
+      '/src/assets/images/prod_sand_trousers_1794759413696.jpg',
     ],
     description: 'Le pantalon tailleur sartorial indispensable pour compléter les silhouettes Allure Homme. Doubles pinces italiennes, taille ajustable sur les côtés, tombé droit impeccable sur des mocassins ou des baskets.',
     descriptionAr: 'سروال بدلة سارتوريال رمادي داكن بكسرات متقنة وتفاصيل خصر أنيقة، يمنحك راحة تامة ومظهراً فخماً يدوم طوال اليوم.',
@@ -226,8 +237,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 9,
     sizes: ['40', '41', '42', '43', '44', '45'],
     images: [
-      'https://images.unsplash.com/photo-1533867617858-e7b97e060509?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_leather_loafers_1794759390824.jpg',
+      '/src/assets/images/prod_brown_suede_loafers_1794759413583.jpg',
     ],
     description: 'Mocassins haut de gamme confectionnés en cuir de veau véritable noir glacé. Ornés d\'un mors métallique finition or brossé, semelle intérieure en cuir avec coussinet amortisseur à mémoire de forme et semelle d\'usure antidérapante.',
     descriptionAr: 'حذاء موكاسين فاخر من الجلد الطبيعي المصقول أسود لامع بإبزيم ذهبي أيقوني، بطانة داخلية مريحة جداً ونعل مقاوم للانزلاق لمظهر إيطالي راقٍ.',
@@ -262,8 +273,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 14,
     sizes: ['M', 'L', 'XL', 'XXL'],
     images: [
-      'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_midnight_tracksuit_1794759391959.jpg',
+      '/src/assets/images/prod_white_sneakers_1794759392359.jpg',
     ],
     description: 'Ensemble tracksuit 2 pièces moderne et raffiné en molleton de coton lourd gratté. Veste demi-zippée avec col montant structuré et pantalon jogger coupe droite avec chevilles élastiquées discrètes. Idéal pour le sport chic et les week-ends détendus.',
     descriptionAr: 'طقم رياضي رجالي مميز قطن 100% عالي الكثافة بلون أزرق نيلي هادئ، ياقة مرتفعة أنيقة وجيوب خفية تمنحك إطلالة شبابية راقية.',
@@ -294,8 +305,7 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 25,
     sizes: ['Taille Unique (Ajustable)'],
     images: [
-      'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_accessories_cap_belt_1794759393863.jpg',
     ],
     description: 'Casquette en coton sergé bleu marine profond avec broderie discrète et visière pré-courbée. Boucle de fermeture arrière en métal gravé.',
     descriptionAr: 'كاسكيت كحلي كلاسيكية قطنية بتطريز بارز دقيق ولمسة راقية لإكمال مظهرك اليومي في سيدي بلعباس.',
@@ -326,8 +336,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 22,
     sizes: ['38', '39', '40', '41', '42', '43'],
     images: [
-      'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1589310243389-96a5483213a8?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_white_shirt_1794759411548.jpg',
+      '/src/assets/images/prod_navy_blazer_1794759389219.jpg',
     ],
     description: 'Chemise blanche sartoriale indispensable en popeline de coton double retors. Col italien renforcé et coupe ajustée soignée pour être portée sous les blazers Allure Homme.',
     descriptionAr: 'قميص أبيض ناصع راقي ومريح، خامة فاخرة تناسب الاجتماعات، الأعراس والسترات الرسمية.',
@@ -357,8 +367,7 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 19,
     sizes: ['30', '31', '32', '33', '34', '36'],
     images: [
-      'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1604176354204-9268737828e4?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_raw_denim_1794759412880.jpg',
     ],
     description: 'Le jean droit en denim lourd 13.5oz, parfaitement coupé pour se porter avec nos sneakers ou nos mocassins en cuir.',
     descriptionAr: 'جينز رجالي متين للاستخدام اليومي بقصة كلاسيكية مستقيمة تجمع بين الراحة والأناقة.',
@@ -388,8 +397,7 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 8,
     sizes: ['M', 'L', 'XL', 'XXL'],
     images: [
-      'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1520975954732-35dd22299614?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_black_leather_jacket_1794759412773.jpg',
     ],
     description: 'Veste en simili-cuir noir profond avec doublure thermique soyeuse, col chemise chic et poches zippées discrètes.',
     descriptionAr: 'جاكيت جلدي أسود عصري يمنحك إطلالة رجالية جذابة مع حماية ممتازة من البرد والرياح.',
@@ -419,8 +427,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 16,
     sizes: ['38', '40', '42', '44', '46'],
     images: [
-      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_sand_trousers_1794759413696.jpg',
+      '/src/assets/images/prod_pleated_trousers_1794759391420.jpg',
     ],
     description: 'Pantalon classique à pinces beige sable vu sur nos publications Instagram avec le polo tricot et les mocassins.',
     descriptionAr: 'سروال كلاسيكي أنيق بكسرات أمامية كما في منشورات الحساب. خصر مريح وقماش انسيابي راقٍ.',
@@ -449,8 +457,7 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 14,
     sizes: ['40', '41', '42', '43', '44', '45'],
     images: [
-      'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_white_sneakers_1794759392359.jpg',
     ],
     description: 'La sneaker blanche intemporelle qui complète toutes les tenues Allure Homme, des costumes décontractés aux jeans.',
     descriptionAr: 'حذاء رياضي كلاسيكي أبيض يتماشى مع السراويل الرسمية والجينز لمظهر صيفي أنيق.',
@@ -479,8 +486,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 9,
     sizes: ['40', '41', '42', '43', '44'],
     images: [
-      'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1533867617858-e7b97e060509?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_brown_suede_loafers_1794759413583.jpg',
+      '/src/assets/images/prod_leather_loafers_1794759390824.jpg',
     ],
     description: 'Mocassins en cuir nubuck brun camel avec surpiqûres sellier faites main. Semelle souple cousue avec pastilles d\'adhérence.',
     descriptionAr: 'حذاء موكاسين بني من الجلد السويدي الفاخر، تفاصيل خياطة يدوية دقيقة وملمس ناعم.',
@@ -510,8 +517,8 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 14,
     sizes: ['M', 'L', 'XL', 'XXL'],
     images: [
-      'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_cream_cardigan_1794759414540.jpg',
+      '/src/assets/images/prod_knit_polo_1794759390482.jpg',
     ],
     description: 'Cardigan torsadé signature en maille dense de pur coton côtelé avec fermeture zippée argentée et col cheminée montant.',
     descriptionAr: 'الكارديغان الأيقوني المحبوك بعناية مع سحاب أمامي وياقة مرتفعة دافئة تعطي حضوراً رجالياً فخماً ومميزاً.',
@@ -540,8 +547,7 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 25,
     sizes: ['95cm', '105cm', '115cm'],
     images: [
-      'https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_accessories_cap_belt_1794759393863.jpg',
     ],
     description: 'Ceinture réversible 2-en-1 : côté noir pour les cérémonies et côté marron pour le quotidien. Boucle tournante en acier brossé.',
     descriptionAr: 'حزام جلد طبيعي أصلي مع إبزيم دوار سلس يوفر استخداماً مزدوجاً باللون الأسود أو البني.',
@@ -570,8 +576,7 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 11,
     sizes: ['M', 'L', 'XL'],
     images: [
-      'https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_suede_overshirt_1794759393049.jpg',
     ],
     description: 'Surchemise en suédine camel veloutée idéale pour un look décontracté chic superposé au-dessus d\'un t-shirt blanc.',
     descriptionAr: 'جاكيت خفيف ستايل أوفر شيرت من الشمواه الفاخر بلون كاميل مميز للخرجات والربيع.',
@@ -600,8 +605,7 @@ export const CASUAL_PRODUCTS: BusinessProduct[] = [
     stock: 17,
     sizes: ['M', 'L', 'XL', 'XXL'],
     images: [
-      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=900&q=85',
-      'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=85',
+      '/src/assets/images/prod_linen_mao_shirt_1794759414543.jpg',
     ],
     description: 'Chemise légère en lin naturel respirant. Col officier moderne sans rabat pour une allure décontractée et soignée sous le soleil de l\'Ouest.',
     descriptionAr: 'قميص كتان خفيف وعالي الجودة، ياقة ماو عصرية تعطي مظهراً منعشاً وأنيقاً.',
@@ -817,7 +821,7 @@ export const UI_TRANSLATIONS = {
     addToCart: 'Ajouter au Panier',
     sizesAvailable: 'Tailles disponibles',
     selectSize: 'Choisir votre taille',
-    deliveryBanner: '🇩🇿 Livraison rapide dans les 58 Wilayas • Paiement Cash à la Livraison (COD)',
+    deliveryBanner: 'Livraison 58 Wilayas · Paiement Cash à la Livraison (COD)',
     stockLeft: 'unités restantes en stock',
     inStock: 'En stock à Sidi Bel Abbès',
     lowStock: 'Stock limité',
@@ -888,7 +892,7 @@ export const UI_TRANSLATIONS = {
     addToCart: 'أضف إلى السلة',
     sizesAvailable: 'المقاسات المتوفرة',
     selectSize: 'اختر مقاسك',
-    deliveryBanner: '🇩🇿 التوصيل متوفر لجميع 58 ولاية • الدفع عند الاستلام كاش',
+    deliveryBanner: 'التوصيل متوفر لجميع 58 ولاية · الدفع عند الاستلام كاش',
     stockLeft: 'قطع متبقية في المخزن',
     inStock: 'متوفر في محل سيدي بلعباس',
     lowStock: 'كمية محدودة',
@@ -959,7 +963,7 @@ export const UI_TRANSLATIONS = {
     addToCart: 'Add to Bag',
     sizesAvailable: 'Available Sizes',
     selectSize: 'Select Size',
-    deliveryBanner: '🇩🇿 Fast Delivery Across All 58 Algerian Wilayas • Cash on Delivery (COD)',
+    deliveryBanner: 'Fast Delivery Across All 58 Wilayas · Cash on Delivery (COD)',
     stockLeft: 'units left in stock',
     inStock: 'In Stock at Sidi Bel Abbès',
     lowStock: 'Limited Stock',

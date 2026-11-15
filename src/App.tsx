@@ -23,26 +23,27 @@ import {
   Phone,
   ShieldCheck,
   Truck,
-  Sun,
-  Moon,
 } from 'lucide-react';
 
 export default function App() {
   const currentBusinessId: BusinessIndustryId = 'casual_men';
 
-  // Light Mode & Dark Mode State (default to light mode as requested, with instant toggle)
+  // Light Mode & Dark Mode State (default light mode, synced with html.dark)
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
 
-  // Primary language: French by default (fr), with instant Arabic (ar) and English (en) support
+  // Primary language: French by default (fr), with Arabic (ar) and English (en)
   const [lang, setLang] = useState<LanguageCode>('fr');
 
   // Dual View Mode: Client E-Commerce Storefront vs Stock Management Dashboard
   const [viewMode, setViewMode] = useState<'storefront' | 'desktop_app'>('storefront');
 
-  // Desktop App Internal Ribbon Tab
+  // Optional category triggered from header navigation
+  const [selectedNavCategory, setSelectedNavCategory] = useState<string | undefined>(undefined);
+
+  // Desktop App Internal Tab
   const [desktopAppView, setDesktopAppView] = useState<'stock' | 'stats' | 'orders' | 'settings'>('stock');
 
-  // Business Data Collections (Products & Orders)
+  // Business Data Collections
   const [products, setProducts] = useState<BusinessProduct[]>([]);
   const [orders, setOrders] = useState<BusinessOrder[]>([]);
 
@@ -53,7 +54,11 @@ export default function App() {
   // Selected Product for Quick Inspection Modal
   const [inspectedProduct, setInspectedProduct] = useState<BusinessProduct | null>(null);
 
-  // Refresh current business data from storage
+  // Sync Tailwind .dark class on <html>
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', themeMode === 'dark');
+  }, [themeMode]);
+
   const loadBusinessData = () => {
     const p = businessStorage.getProducts(currentBusinessId);
     const o = businessStorage.getOrders(currentBusinessId);
@@ -120,11 +125,13 @@ export default function App() {
   return (
     <div
       className={`min-h-screen w-full max-w-full overflow-x-hidden flex flex-col transition-colors duration-200 ${
-        isDark ? 'bg-[#090a0c] text-zinc-100 selection:bg-amber-400 selection:text-black' : 'bg-[#fafafa] text-zinc-900 selection:bg-amber-300 selection:text-black'
+        isDark
+          ? 'bg-[#0B0C0E] text-[#F4F1EA] selection:bg-[#D4AF37] selection:text-[#141413]'
+          : 'bg-[#FAF8F5] text-[#141413] selection:bg-[#B48327] selection:text-white'
       } ${isRTL ? 'font-arabic text-right' : 'font-sans text-left'}`}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      {/* Top Header Bar */}
+      {/* Top Bar */}
       <FreelanceHubHeader
         viewMode={viewMode}
         setViewMode={setViewMode}
@@ -134,11 +141,11 @@ export default function App() {
         onSelectLang={setLang}
         themeMode={themeMode}
         onToggleTheme={toggleTheme}
+        onQuickSelectCategory={(cat) => setSelectedNavCategory(cat)}
       />
 
-      {/* Main Experience Canvas */}
-      <main className="flex-1 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-3 sm:py-6 w-full max-w-full overflow-x-hidden">
-        {/* VIEW 1: CLIENT E-COMMERCE WEBSITE */}
+      {/* Main Content Container */}
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 w-full">
         {viewMode === 'storefront' && (
           <IndustryStorefront
             config={currentConfig}
@@ -147,10 +154,10 @@ export default function App() {
             onOpenProductDetail={(prod) => setInspectedProduct(prod)}
             lang={lang}
             themeMode={themeMode}
+            externalCategory={selectedNavCategory}
           />
         )}
 
-        {/* VIEW 2: STORE OWNER INVENTORY & STOCK MANAGEMENT */}
         {viewMode === 'desktop_app' && (
           <DesktopWindowFrame
             config={currentConfig}
@@ -197,133 +204,122 @@ export default function App() {
         themeMode={themeMode}
       />
 
-      {/* Mobile-First Sticky Bottom Action Bar for Smartphone Shoppers */}
-      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-40 backdrop-blur-xl border-t px-2 py-2 flex items-center justify-around text-xs shadow-2xl transition-colors w-full max-w-full ${
-        isDark ? 'bg-[#0e1014]/95 border-zinc-800' : 'bg-white/95 border-zinc-200'
-      }`}>
+      {/* Compact Mobile Bottom Action Bar (<= 56px height) */}
+      <nav
+        className={`md:hidden fixed bottom-0 left-0 right-0 z-40 h-14 backdrop-blur-xl border-t px-2 flex items-center justify-around text-[11px] transition-colors w-full ${
+          isDark
+            ? 'bg-[#0B0C0E]/95 border-[#22252D] text-stone-300'
+            : 'bg-[#FAF8F5]/95 border-[#E6E1D6] text-stone-700'
+        }`}
+        aria-label="Mobile quick actions"
+      >
         <button
           onClick={() => setViewMode('storefront')}
-          className={`flex flex-col items-center gap-0.5 cursor-pointer ${
-            viewMode === 'storefront'
-              ? 'text-amber-500 font-bold'
-              : isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'
+          className={`flex flex-col items-center gap-0.5 cursor-pointer py-1 px-3 ${
+            viewMode === 'storefront' ? 'text-[#9A6E1C] dark:text-[#D4AF37] font-semibold' : ''
           }`}
         >
           <Store className="w-4 h-4" />
-          <span className="text-[10px]">{t.navStore}</span>
+          <span>{t.navStore}</span>
         </button>
 
         <a
           href={GK_STORE_INFO.whatsappDirect}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col items-center gap-0.5 text-emerald-600 font-semibold cursor-pointer"
+          className="flex flex-col items-center gap-0.5 text-emerald-600 dark:text-emerald-400 font-medium py-1 px-3"
         >
           <MessageCircle className="w-4 h-4" />
-          <span className="text-[10px]">WhatsApp</span>
+          <span>WhatsApp</span>
         </a>
 
         <button
           onClick={() => setIsCartOpen(true)}
-          className="relative flex flex-col items-center gap-0.5 text-amber-500 font-bold cursor-pointer"
+          className="relative flex flex-col items-center gap-0.5 font-semibold py-1 px-3 cursor-pointer"
         >
           <div className="relative">
             <ShoppingBag className="w-4 h-4" />
             {totalCartCount > 0 && (
-              <span className="absolute -top-1.5 -right-2 w-4 h-4 rounded-full bg-amber-400 text-black text-[9px] font-black flex items-center justify-center">
+              <span className="absolute -top-1.5 -right-2 w-4 h-4 rounded-full bg-[#B48327] text-white text-[9px] font-bold flex items-center justify-center tabular-nums">
                 {totalCartCount}
               </span>
             )}
           </div>
-          <span className="text-[10px]">Panier ({totalCartCount})</span>
+          <span>{lang === 'ar' ? 'السلة' : 'Panier'}</span>
         </button>
 
         <button
           onClick={() => setViewMode('desktop_app')}
-          className={`flex flex-col items-center gap-0.5 cursor-pointer ${
-            viewMode === 'desktop_app'
-              ? 'text-amber-500 font-bold'
-              : isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'
+          className={`flex flex-col items-center gap-0.5 cursor-pointer py-1 px-3 ${
+            viewMode === 'desktop_app' ? 'text-[#9A6E1C] dark:text-[#D4AF37] font-semibold' : ''
           }`}
         >
           <LayoutDashboard className="w-4 h-4" />
-          <span className="text-[10px]">{t.navDashboard}</span>
+          <span>{lang === 'ar' ? 'المخزون' : 'Stock'}</span>
         </button>
+      </nav>
 
-        <button
-          onClick={toggleTheme}
-          className={`flex flex-col items-center gap-0.5 cursor-pointer ${
-            isDark ? 'text-amber-400' : 'text-amber-600'
-          }`}
-          title={isDark ? t.themeLight : t.themeDark}
-        >
-          {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          <span className="text-[10px]">{isDark ? 'Clair' : 'Sombre'}</span>
-        </button>
-      </div>
-
-      {/* Clean Boutique Footer */}
-      <footer className={`border-t py-10 text-xs transition-colors mt-auto pb-24 md:pb-12 w-full max-w-full overflow-hidden ${
-        isDark ? 'border-zinc-800/80 bg-[#07080a] text-zinc-400' : 'border-zinc-200 bg-white text-zinc-600'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      {/* Architectural Boutique Footer */}
+      <footer
+        className={`border-t py-12 text-xs transition-colors mt-auto pb-24 md:pb-12 w-full ${
+          isDark
+            ? 'border-[#22252D] bg-[#090A0C] text-stone-400'
+            : 'border-[#E6E1D6] bg-white text-stone-600'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Column 1: Store Brand */}
+            {/* Column 1: Maison Identity */}
             <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full border flex flex-col items-center justify-center ${
-                  isDark ? 'bg-zinc-900 border-amber-400/40' : 'bg-black border-amber-500/60 shadow-sm'
-                }`}>
-                  <span className="text-[10px] font-serif font-black text-amber-400">AH</span>
-                  <span className="text-[5px] font-sans font-bold text-white tracking-widest">HOMME</span>
-                </div>
-                <div>
-                  <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-zinc-900'}`}>{GK_STORE_INFO.name}</h3>
-                  <p className="text-[11px] text-zinc-500 italic">"{GK_STORE_INFO.tagline}"</p>
-                </div>
+              <div className="font-serif-luxury text-lg font-semibold tracking-[0.14em] uppercase text-[#141413] dark:text-[#F4F1EA]">
+                {GK_STORE_INFO.name}
               </div>
+              <p className="text-xs italic text-[#9A6E1C] dark:text-[#D4AF37]">
+                {GK_STORE_INFO.tagline}
+              </p>
               <p className="text-xs leading-relaxed">
-                Boutique de prêt-à-porter masculin et style sartorial à Sidi Bel Abbès (Rue Mohamed Khemisti). Costumes, blazers, polos tricot, pantalons à pinces, ensembles casual, mocassins en cuir et casquettes Allure.
+                Boutique de prêt-à-porter masculin et style sartorial à Sidi Bel Abbès (Rue Mohamed Khemisti). Blazers, polos tricot, pantalons à pinces, ensembles casual et mocassins en cuir.
               </p>
             </div>
 
-            {/* Column 2: Algerian Delivery & Payment */}
-            <div className="space-y-2">
-              <h4 className="font-bold text-xs uppercase tracking-wider text-amber-500">
-                Livraison & Paiement Algérie
+            {/* Column 2: Delivery & Payment */}
+            <div className="space-y-3">
+              <h4 className="font-semibold text-xs uppercase tracking-wider text-[#141413] dark:text-[#F4F1EA]">
+                Livraison & Règlement
               </h4>
-              <ul className="space-y-1.5 text-xs">
-                <li className="flex items-center gap-1.5">
-                  <Truck className="w-3.5 h-3.5 text-emerald-500" />
+              <ul className="space-y-2 text-xs">
+                <li className="flex items-center gap-2">
+                  <Truck className="w-3.5 h-3.5 text-[#9A6E1C] dark:text-[#D4AF37] shrink-0" />
                   <span>58 Wilayas d'Algérie (Yalidine Express / ZR)</span>
                 </li>
-                <li className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
+                <li className="flex items-center gap-2">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>Paiement Cash à la Livraison (COD)</span>
                 </li>
-                <li>• Livraison rapide à domicile</li>
-                <li>• Retrait disponible au bureau Stop Desk</li>
+                <li className="text-stone-500 dark:text-stone-400">
+                  Livraison rapide à domicile ou retrait Stop Desk
+                </li>
               </ul>
             </div>
 
-            {/* Column 3: Contact Magasin Sidi Bel Abbès (22) */}
-            <div className="space-y-2">
-              <h4 className="font-bold text-xs uppercase tracking-wider text-amber-500">
-                Boutique & Coordonnées
+            {/* Column 3: Boutique Coordinates */}
+            <div className="space-y-3">
+              <h4 className="font-semibold text-xs uppercase tracking-wider text-[#141413] dark:text-[#F4F1EA]">
+                Boutique & Contact
               </h4>
-              <ul className="space-y-1.5 text-xs">
-                <li className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <ul className="space-y-2 text-xs">
+                <li className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#9A6E1C] dark:text-[#D4AF37] shrink-0" />
                   <span>{GK_STORE_INFO.location}</span>
                 </li>
-                <li className="flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                  <a href={`tel:${GK_STORE_INFO.phone}`} className="hover:underline">
+                <li className="flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <a href={`tel:${GK_STORE_INFO.phone}`} className="hover:underline font-mono tabular-nums">
                     {GK_STORE_INFO.phoneFormatted}
                   </a>
                 </li>
-                <li className="flex items-center gap-1.5">
-                  <Instagram className="w-3.5 h-3.5 text-pink-500 shrink-0" />
+                <li className="flex items-center gap-2">
+                  <Instagram className="w-3.5 h-3.5 text-[#9A6E1C] dark:text-[#D4AF37] shrink-0" />
                   <a
                     href={GK_STORE_INFO.instagramUrl}
                     target="_blank"
@@ -333,38 +329,27 @@ export default function App() {
                     @{GK_STORE_INFO.instagramHandle}
                   </a>
                 </li>
-                <li className="flex items-center gap-1.5">
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                  <a
-                    href={GK_STORE_INFO.whatsappDirect}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:underline"
-                  >
-                    WhatsApp : {GK_STORE_INFO.phoneFormatted}
-                  </a>
-                </li>
               </ul>
             </div>
           </div>
 
-          <div className={`pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] ${
-            isDark ? 'border-zinc-800/80 text-zinc-500' : 'border-zinc-200 text-zinc-500'
-          }`}>
-            <div>
-              © 2026 ALLURE HOMME (Sidi Bel Abbès, 22). Tous droits réservés.
-            </div>
-            <div className="flex items-center gap-3">
-              <a href={GK_STORE_INFO.mapsUrl} target="_blank" rel="noreferrer" className="hover:text-amber-500">
+          <div
+            className={`pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] ${
+              isDark ? 'border-[#22252D] text-stone-500' : 'border-[#EDE8DE] text-stone-500'
+            }`}
+          >
+            <div>© 2026 ALLURE HOMME · Sidi Bel Abbès (22). Tous droits réservés.</div>
+            <div className="flex items-center gap-4">
+              <a href={GK_STORE_INFO.mapsUrl} target="_blank" rel="noreferrer" className="hover:text-[#9A6E1C] dark:hover:text-[#D4AF37] transition-colors">
                 Google Maps
               </a>
-              <span>•</span>
-              <a href={GK_STORE_INFO.instagramUrl} target="_blank" rel="noreferrer" className="hover:text-pink-500">
-                Instagram @{GK_STORE_INFO.instagramHandle}
+              <span aria-hidden="true">·</span>
+              <a href={GK_STORE_INFO.instagramUrl} target="_blank" rel="noreferrer" className="hover:text-[#9A6E1C] dark:hover:text-[#D4AF37] transition-colors">
+                Instagram
               </a>
-              <span>•</span>
-              <a href={GK_STORE_INFO.whatsappDirect} target="_blank" rel="noreferrer" className="hover:text-emerald-500">
-                WhatsApp {GK_STORE_INFO.phoneFormatted}
+              <span aria-hidden="true">·</span>
+              <a href={GK_STORE_INFO.whatsappDirect} target="_blank" rel="noreferrer" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                WhatsApp
               </a>
             </div>
           </div>
